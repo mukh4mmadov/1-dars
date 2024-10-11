@@ -47,7 +47,7 @@ function Pagination() {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center py-8">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 gap-6">
           {loading ? (
             <div className="col-span-full flex justify-center items-center h-48">
               <h1 className="text-xl font-bold text-gray-600">Loading...</h1>
