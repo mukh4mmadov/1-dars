@@ -5,18 +5,19 @@ import { useSearchParams } from "react-router-dom";
 
 function Home() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [total, setTotal] = useState(625);
+  const [total, setTotal] = useState(20);
   const [data, setData] = useState([]);
   const [limit, setLimit] = useState(8);
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     fetch(
-      ` https://jsonplaceholder.typicode.com/photos?_page=${currentPage}&_limit=${limit}`
+      `https://jsonplaceholder.typicode.com/photos?_page=${currentPage}&_limit=${limit}`
     )
       .then((res) => res.json())
       .then((data) => {
         setData(data);
+      
       })
       .catch((err) => {
         console.log(err);
