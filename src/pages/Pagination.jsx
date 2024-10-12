@@ -46,8 +46,10 @@ function Pagination() {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center py-8">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 gap-6">
+      <div className="container mx-auto px-4 max-w-3xl">
+        {" "}
+        <div className="grid grid-cols-1 gap-6 justify-center">
+          {" "}
           {loading ? (
             <div className="col-span-full flex justify-center items-center h-48">
               <h1 className="text-xl font-bold text-gray-600">Loading...</h1>
@@ -56,7 +58,7 @@ function Pagination() {
             data.map((product) => (
               <div
                 key={product.id}
-                className="bg-white rounded-lg shadow-lg p-4 flex flex-col items-center"
+                className="bg-white rounded-lg shadow-lg p-4 flex flex-col items-center max-w-xs"
               >
                 <img
                   src={product.thumbnailUrl}
@@ -73,7 +75,7 @@ function Pagination() {
             ))
           ) : (
             <div className="col-span-full flex justify-center items-center h-48">
-              <h1 className="text-xl font-bold text-gray-600">No Data Available</h1>
+              <h1 className="text-xl font-bold text-gray-600">Malumot yoq</h1>
             </div>
           )}
         </div>
