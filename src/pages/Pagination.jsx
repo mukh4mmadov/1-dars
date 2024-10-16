@@ -11,7 +11,7 @@ function Home() {
     )
       .then((resp) => resp.json())
       .then((d) => {
-        setData((prevData) => [...prevData, ...d]); 
+        setData((prevData) => [...prevData, ...d]);
       })
       .catch((err) => {
         console.log(err);
@@ -23,8 +23,8 @@ function Home() {
     const currentHeight =
       event.target.documentElement.scrollTop + window.innerHeight;
 
-    if (currentHeight + 1 >= scrollHeight) {
-      setPage((prevPage) => prevPage + 1); h
+    if (currentHeight + 301 >= scrollHeight) {
+      setPage((prevPage) => prevPage + 1);
     }
   }
 
@@ -34,22 +34,28 @@ function Home() {
   }, []);
 
   return (
-    <div className="grid grid-cols-2 gap-6">
-      {data.length > 0 &&
-        data.map((value) => (
-          <div
-            key={value.id}
-            className="rounded overflow-hidden shadow-lg transform transition-transform duration-300"
-          >
-            <img
-              src={value.url}
-              alt={value.title}
-              className="w-full h-48 object-cover"
-            />
-            <h1>{value.id}</h1>
-            <p>{value.title}</p>
-          </div>
-        ))}
+    <div>
+      <div className="grid grid-cols-2 gap-6">
+        {data.length > 0 &&
+          data.map((value) => (
+            <div
+              key={value.id}
+              className="rounded overflow-hidden shadow-lg transform transition-transform duration-300"
+            >
+              <img
+                src={value.url}
+                alt={value.title}
+                className="w-full h-48 object-cover"
+              />
+              <h1>{value.id}</h1>
+              <p>{value.title}</p>
+            </div>
+          ))}
+      </div>
+
+      <footer className="bg-gray-800 text-white h-[300px] flex items-center justify-center mt-8">
+        <h1>FOOTER</h1>
+      </footer>
     </div>
   );
 }
