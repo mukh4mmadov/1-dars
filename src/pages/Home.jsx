@@ -4,30 +4,36 @@ import "react-responsive-pagination/themes/classic.css";
 import { useSearchParams } from "react-router-dom";
 
 function Home() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [total, setTotal] = useState(20);
   const [data, setData] = useState([]);
+  const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [total, setTotal] = useState(625);
+  const [params, setParams] = useSearchParams();
+
+  useEffect(() => {
+    let pageParams = Number(params.get("page")) || 1;
+    let limitParams = Number(params.get("limit")) || 8;
+    setPage(pageParams);
+    setLimit(limitParams);
+  }, [params]);
 
   useEffect(() => {
     fetch(
-      `https://jsonplaceholder.typicode.com/photos?_page=${currentPage}&_limit=${limit}`
+      `https://jsonplaceholder.typicode.com/photos?_page=${page}&_limit=${limit}`
     )
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data);
-      
+      .then((resp) => resp.json())
+      .then((d) => {
+        setData(d);
+        setParams({ page: page, limit: limit });
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [currentPage]);
+  }, [page, limit, setParams]);
 
-  function handleChangePagination(e) {
-    setCurrentPage(e);
-    setSearchParams(`page=${e}&limit=${limit}`);
-  }
+  const handleChange = (newPage) => {
+    setPage(newPage);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center">
@@ -46,18 +52,20 @@ function Home() {
               className="rounded overflow-hidden shadow-lg transform transition-transform duration-300 "
             >
               <img
-                src={value.thumbnailUrl}
+                src={value.url}
                 alt={value.title}
                 className="w-full h-48 object-cover"
               />
+              <h1>{value.id}</h1>
+              <p>{value.title}</p>
             </div>
           ))}
       </div>
       <div className="mt-8">
         <ResponsivePagination
-          current={currentPage}
+          current={page}
           total={total}
-          onPageChange={handleChangePagination}
+          onPageChange={handleChange}
           maxWidth={500}
         />
       </div>

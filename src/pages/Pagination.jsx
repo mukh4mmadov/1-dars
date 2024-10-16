@@ -1,87 +1,57 @@
 import React, { useEffect, useState } from "react";
 
-function Pagination() {
+function Home() {
   const [data, setData] = useState([]);
-  const [offset, setOffset] = useState(1);
-  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(8);
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        console.log(`Fetching data for page: ${offset}`);
-        const res = await fetch(
-          `https://jsonplaceholder.typicode.com/photos?_page=${offset}&_limit=5`
-        );
+    fetch(
+      `https://jsonplaceholder.typicode.com/photos?_page=${page}&_limit=${limit}`
+    )
+      .then((resp) => resp.json())
+      .then((d) => {
+        setData((prevData) => [...prevData, ...d]); 
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [page]);
 
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
+  function handleScroll(event) {
+    const scrollHeight = event.target.documentElement.scrollHeight;
+    const currentHeight =
+      event.target.documentElement.scrollTop + window.innerHeight;
 
-        const data = await res.json();
-        console.log("Fetched Data:", data);
-        setData((prev) => [...prev, ...data]);
-      } catch (error) {
-        console.log("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [offset]);
+    if (currentHeight + 1 >= scrollHeight) {
+      setPage((prevPage) => prevPage + 1); h
+    }
+  }
 
   useEffect(() => {
-    const handleScroll = (e) => {
-      const scrollHeight = e.target.documentElement.scrollHeight;
-      const currentHeight =
-        e.target.documentElement.scrollTop + window.innerHeight;
-      if (currentHeight >= scrollHeight) {
-        setOffset((prev) => prev + 1);
-      }
-    };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center py-8">
-      <div className="container mx-auto px-4 max-w-3xl">
-        {" "}
-        <div className="grid grid-cols-1 gap-6 justify-center">
-          {" "}
-          {loading ? (
-            <div className="col-span-full flex justify-center items-center h-48">
-              <h1 className="text-xl font-bold text-gray-600">Loading...</h1>
-            </div>
-          ) : data.length > 0 ? (
-            data.map((product) => (
-              <div
-                key={product.id}
-                className="bg-white rounded-lg shadow-lg p-4 flex flex-col items-center max-w-xs"
-              >
-                <img
-                  src={product.thumbnailUrl}
-                  alt=""
-                  className="w-full h-48 object-cover rounded"
-                />
-                <h1 className="mt-2 text-lg font-semibold">
-                  <strong>ID: {product.id}</strong>
-                </h1>
-                <h1 className="text-sm text-gray-500">
-                  <strong>Title: {product.title}</strong>
-                </h1>
-              </div>
-            ))
-          ) : (
-            <div className="col-span-full flex justify-center items-center h-48">
-              <h1 className="text-xl font-bold text-gray-600">Malumot yoq</h1>
-            </div>
-          )}
-        </div>
-      </div>
+    <div className="grid grid-cols-2 gap-6">
+      {data.length > 0 &&
+        data.map((value) => (
+          <div
+            key={value.id}
+            className="rounded overflow-hidden shadow-lg transform transition-transform duration-300"
+          >
+            <img
+              src={value.url}
+              alt={value.title}
+              className="w-full h-48 object-cover"
+            />
+            <h1>{value.id}</h1>
+            <p>{value.title}</p>
+          </div>
+        ))}
     </div>
   );
 }
 
-export default Pagination;
+export default Home;
